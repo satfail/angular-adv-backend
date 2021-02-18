@@ -21,6 +21,8 @@ app.use(express.json());
 //Cualquier cosa que pase por esa url va a las rutas
 app.use('/api/users', require('./routes/users.routes'));
 app.use('/api/login', require('./routes/auth.routes'));
+app.use('/api/hospital', require('./routes/hospital.routes'));
+app.use('/api/medico', require('./routes/medico.routes'));
 
 
 
