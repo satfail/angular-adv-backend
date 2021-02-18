@@ -25,7 +25,7 @@ const validarJWT = (req,res,next) =>{
             ok:false,
             msg: 'Token incorrecto'
         });
-    } 
+    }
     
 }
 
