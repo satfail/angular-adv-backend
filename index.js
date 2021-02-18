@@ -3,20 +3,28 @@ require('dotenv').config();
 const { dbConnection } = require('./database/config');
 const cors = require('cors');
 
-//Crear el server express
+/*El orden importa, sobre todo con los middlewares*/ 
+//1-Crear el server express
 const app = express();
 
-//Configurar cors - Middlewares para las peticiones
+//2-Configurar cors - Middlewares para las peticiones
 app.use(cors());
 
+//3-Conexión BBDD
 dbConnection();
-app.get('/', (req,res) => {
 
-    res.json({
-        ok:true,
-        msg:"Hola mundo!"
-    })
-});
+//4**-Lectura y parseo del body
+app.use(express.json());
+
+
+//5-Rutas
+//Cualquier cosa que pase por esa url va a las rutas
+app.use('/api/users', require('./routes/users.routes'));
+app.use('/api/login', require('./routes/auth.routes'));
+
+
+
+
 
 app.listen(process.env.PORT, () =>{
     console.log('Servidor levantado en el puerto ' + process.env.PORT)
