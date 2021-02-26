@@ -3,12 +3,36 @@ const User = require("../models/user.model");
 const bcryptjs = require('bcryptjs');
 const { generarJWT } = require('../helpers/jwt');
 
-const getUsers = async (req,res) => {
+const getUsers = async (req,res = response) => {
 
-    const usuarios = await User.find({},'name email role google');
+    const desde= Number(req.query.desde) || 0;
+
+
+    // const usuarios = await User.find({},'name email role google')
+    //                             .skip(desde)
+    //                             .limit(5);
+
+    // const totalRegistros = await User.count();
+    
+    /* Hay dos await se quier meter todo en una promesa y que se ejecute todo
+        de manera atómica, y no esperar dos veces   , devuelve un arreglo con los 
+        resultados de la promesa, Desectructuramos para pillar un valor
+    */
+
+   const[usuarios, totalRegistros] = await Promise.all([
+
+    User.find({},'name email role google')
+        .skip(desde)
+        .limit(5),
+
+    User.count()
+
+    ]);
+    
     res.json({
         ok:true,
-        usuarios
+        usuarios,
+        total: totalRegistros
     })
 }
 const addUser = async (req,res = response) => {

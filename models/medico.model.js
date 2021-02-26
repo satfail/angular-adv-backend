@@ -13,8 +13,14 @@ const MedicoSchema = Schema({
     },
     //Referencia al id de la clase exportada por el esquema de usuario
     hospital:{
+        require:true,
         type: Schema.Types.ObjectId,
         ref:'Hospital'
+    },
+    user:{
+        require:true,
+        type: Schema.Types.ObjectId,
+        ref:'User'
     }
 });
 

@@ -23,6 +23,8 @@ app.use('/api/users', require('./routes/users.routes'));
 app.use('/api/login', require('./routes/auth.routes'));
 app.use('/api/hospital', require('./routes/hospital.routes'));
 app.use('/api/medico', require('./routes/medico.routes'));
+app.use('/api/todo', require('./routes/busqueda.routes'));
+app.use('/api/uploads', require('./routes/uploads.routes'));
 
 
 
