@@ -2,7 +2,7 @@
 
 /* Path : 'api/login' */
 const { Router } = require('express');
-const {login} = require('../controlers/auth.controler');
+const {login, googleSignIn} = require('../controlers/auth.controler');
 const { check } = require('express-validator');
 const {validarCampos} = require('../middlewares/validar.middleware');
 
@@ -15,6 +15,15 @@ router.post('/',
     validarCampos, //Custom middleware
 ],
 login
+)
+
+
+router.post('/google',
+[
+    check('token', 'El token de google es obligatorio').not().isEmpty(),
+    validarCampos, //Custom middleware
+],
+googleSignIn
 )
 
 

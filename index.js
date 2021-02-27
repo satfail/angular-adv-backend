@@ -10,11 +10,15 @@ const app = express();
 //2-Configurar cors - Middlewares para las peticiones
 app.use(cors());
 
-//3-Conexión BBDD
+//3**-Lectura y parseo del body
+app.use(express.json());
+
+//4-Conexión BBDD
 dbConnection();
 
-//4**-Lectura y parseo del body
-app.use(express.json());
+//Directorio público
+app.use(express.static('public'));
+
 
 
 //5-Rutas
