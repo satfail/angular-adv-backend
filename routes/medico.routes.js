@@ -31,11 +31,14 @@ router.post(
 
     router.put('/:id',
     [
-        
+        validarJWT,
+        check('name', 'Nombre del médico no es válido').not().isEmpty(),
+        check('hospital', 'El id del hospital no es válido').isMongoId(),
+        validarCampos,  
     ] 
     , putMedico);
 
-    router.delete('/:id', deleteMedico);
+    router.delete('/:id',validarJWT ,deleteMedico);
 
 
 

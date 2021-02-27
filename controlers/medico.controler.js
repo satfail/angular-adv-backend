@@ -40,19 +40,74 @@ const addMedico = async (req,res = response) =>{
         });
     }
 }
-const putMedico = (req,res = response) =>{
+const putMedico = async (req,res = response) =>{
+    
+    const medicoID = req.params.id;
+    const uid = req.uid; //Recuerda que viene del middleware JWT
+    
+    try {
 
-    res.json({
-        ok:true,
-        msg:'putMedico'
-    });
+        const medicoDb = await Medico.findById(medicoID);
+        console.log(medicoDb);
+        
+        if(!medicoDb){
+            res.status(404).json({
+                ok:false,
+                msg:'Medico no encontrado'
+            });
+        }
+
+
+        const cambiosMedico = { 
+        ...req.body,
+        usuario : uid,
+            
+        };
+
+        const updateMedico = await Medico.findByIdAndUpdate(medicoID, cambiosMedico, {new:true})
+
+        res.json({
+            ok:true,
+            updateMedico: updateMedico,
+        });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok:false,
+            msg:'Error al actualizar'
+        });
+    }
 }
-const deleteMedico = (req,res = response) =>{
+const deleteMedico = async (req,res = response) =>{
+    
+    const medicoID = req.params.id;
+    try {
 
-    res.json({
-        ok:true,
-        msg:'deleteMedico'
-    });
+        const medicoDb = await Medico.findById(medicoID);
+        console.log(medicoDb);
+        
+        if(!medicoDb){
+            res.status(404).json({
+                ok:false,
+                msg:'Medico no encontrado'
+            });
+        }
+        
+        await Medico.findByIdAndDelete(medicoID);
+
+        res.json({
+            ok:true,
+            msg:'Medico borrado Correctamente'
+        });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok:false,
+            msg:'Error al Borrar'
+        });
+    }
 }
 
 
@@ -61,6 +116,6 @@ module.exports = {
     getMedico,
     addMedico,
     putMedico,
-    deleteMedico
+    deleteMedico,
 
 }

@@ -42,19 +42,75 @@ const addHospital = async (req,res = response) =>{
 
 
 }
-const putHospital = (req,res = response) =>{
+const putHospital = async (req,res = response) =>{
 
-    res.json({
-        ok:true,
-        msg:'putHospital'
-    });
+    const hospitalID = req.params.id;
+    const uid = req.uid; //Recuerda que viene del middleware JWT
+    
+    try {
+
+        const hospitalDb = await Hospital.findById(hospitalID);
+        console.log(hospitalDb);
+        
+        if(!hospitalDb){
+            res.status(404).json({
+                ok:false,
+                msg:'Hospital no encontrado'
+            });
+        }
+
+
+        const cambiosHospital = { 
+        ...req.body,
+        usuario : uid,
+
+        };
+
+        const updateHospital = await Hospital.findByIdAndUpdate(hospitalID, cambiosHospital, {new:true})
+
+        res.json({
+            ok:true,
+            updateHospital,
+        });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok:false,
+            msg:'Error al actualizar'
+        });
+    }
 }
-const deleteHospital = (req,res = response) =>{
+const deleteHospital = async (req,res = response) =>{
 
-    res.json({
-        ok:true,
-        msg:'deleteHospital'
-    });
+
+    const hospitalID = req.params.id;
+    
+    try {
+
+        const hospitalDb = await Hospital.findById(hospitalID);
+        
+        if(!hospitalDb){
+            res.status(404).json({
+                ok:false,
+                msg:'Hospital no encontrado'
+            });
+        }
+
+        await Hospital.findByIdAndDelete(hospitalID);
+
+        res.json({
+            ok:true,
+            msg:'Hospital borrado correctemente',
+        });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok:false,
+            msg:'Error al borrar'
+        });
+    }
 }
 
 
